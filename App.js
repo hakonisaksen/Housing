@@ -12,6 +12,8 @@ export default function App() {
   const [bedrooms, setBedrooms] = useState("");
   const [monthlyIncomePerRoom, setMonthlyIncomePerRoom] = useState("");
   const [totalIncomeRental, setTotalIncomeRental] = useState(null);
+  const [incomeSallary, setIncomeSallary] = useState("");
+  const [totalPossibleLoan, setTotalPossibleLoan] = useState(null);
   
   const calculateLoan = () => {
     const principal  = parseFloat(price) - parseFloat(equity);
@@ -29,6 +31,13 @@ export default function App() {
 
     setTotalIncomeRental(totalMonthlyIncome);
   };
+
+  const calculatePossibleLoan = () => {
+    const totalPossibleLoan = (parseFloat(incomeSallary) + 12*parseFloat(totalIncomeRental))*5;
+
+    setTotalPossibleLoan(totalPossibleLoan);
+  };
+
 
   return (
     <View style={styles.container}>
@@ -62,6 +71,7 @@ export default function App() {
         value={interestRate}
         onChangeText={setInterestRate}
       />
+    
       <Button title="Beregn lån" onPress={calculateLoan} />
       {monthlyPayment !== null && (
         <Text>Månedlig betaling: {monthlyPayment.toFixed(2)}</Text>
@@ -88,6 +98,19 @@ export default function App() {
       {totalIncomeRental !== null && (
         <Text>Månedlig leieinntekter: {totalIncomeRental.toFixed(2)}</Text>
       )}
+      <Text style={styles.title}>Finans</Text>
+      <TextInput
+        placeholder='Årslønn'
+        keyboardType="numeric"
+        style={styles.input}
+        value={incomeSallary}
+        onChangeText={setIncomeSallary}
+      />
+      <Button title="Beregn total" onPress={calculatePossibleLoan} />
+      {incomeSallary !== null && (
+        <Text>Mulig lån: {totalPossibleLoan}</Text>        
+      )}
+      <Text>Egenkaptil: {totalPossibleLoan*0.15}</Text>
     </View>
   );
 }
